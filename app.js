@@ -1,3 +1,6 @@
+if(process.env.NODE_ENV !== "production"){
+  require("dotenv").config();
+}
 const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
@@ -6,17 +9,16 @@ const methodOverride = require("method-override");
 const MONGO_URL = "mongodb://localhost:27017/wanderlust";
 const ejs_mate = require("ejs-mate");
 const ExpressError = require("./utils/ExpressError.js");
+const dbUrl = process.env.ATLASDB_URL;
 const listingRouter = require("./routes/listing.js");
 const reviewRouter = require("./routes/review.js");
 const userRouter = require("./routes/user.js");
-const session=require("express-session");
+const session = require("express-session");
+const MongoDBStore = require('connect-mongodb-session')(session);
 const flash = require("connect-flash");
-const passport=require("passport");
+const passport = require("passport");
 const LocalStrategy=require("passport-local");
 const User=require("./models/user.js");
-
-
-
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
 app.use(express.static(path.join(__dirname, "public")));
@@ -24,15 +26,28 @@ app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
 app.engine("ejs", ejs_mate);
 
+const store = new MongoDBStore({
+  uri: dbUrl,
+  crypto: {
+    secret: process.env.SECRET,
+  },
+  touchAfter: 24 * 60 * 60,
+  databaseName: 'wanderlust',
+  collection: 'mySessions'
+});
+store.on("error", function(e){
+  console.log("mongo session store error", e);
+});
 const sessionOptions={
-  secret:"mysecretcode",
+  store:store,
+  secret:process.env.SECRET,
   resave:false,
-  saveUninitialized:true,
-  cookie:{
-    expries:Date.now()+1000*60*60*24*7,
-    maxAge:1000*60*60*24*7,
-    httpOnly:true
-  }
+  saveUninitialized: true,
+  cookie: {
+    expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
+    maxAge: 1000 * 60 * 60 * 24 * 7,
+    httpOnly: true,
+  },
 };
 main()
 .then(() => {
@@ -43,7 +58,7 @@ main()
   });
 
 async function main() {
-  await mongoose.connect(MONGO_URL);
+  await mongoose.connect(dbUrl);
 }
 
 //-------------------------------
@@ -60,12 +75,8 @@ passport.deserializeUser(User.deserializeUser());
 app.use((req,res,next)=>{
   res.locals.success=req.flash("success");
   res.locals.error=req.flash("error");
-  res.locals.currentUser=req.user;
+  res.locals.currentUser=req.user || null;
   next();
-});
-
-app.get("/", (req, res) => {
-  res.render("./listings/home.ejs");
 });
 
 //routes

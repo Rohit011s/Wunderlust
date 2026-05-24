@@ -1,25 +1,66 @@
 <% layout('layouts/boilerplate') %>
-        <h3>All listings !</h3>
-        <div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-1 g-4">
-            <% for(let listing of listings){ %>
-                <a href="/listings/<%= listing._id %>" class="card-linking">
-                    <div class="card col listing-card">
+<div class="filters-container">
 
-                        <img src="<%= listing.image.url %>" class="card-img-top" alt="..." style="height: 20rem;">
-
-                        <div class="card-img-overlay"></div>
-                        <div class="card-body">
-                            <h5 class="card-title"><b>
-
-                                    <%= listing.title %>
-                                </b>
-                            </h5>
-                            <!-- <p class="card-text"><%= listing.description %></p> -->
-                            <p class="card-text">&#8377 <%= listing.price.toLocaleString('en-IN') %>
-                            </p>
-                            <!-- <a href="#" class="btn btn-primary">Go somewhere</a> -->
-                        </div>
-                    </div>
-                </a>
-                <%}%>
+    <div id="filters">
+        <div class="filter" data-category="apartment">
+            <i class="fa-regular fa-building"></i>
+            <label>Apartment</label>
         </div>
+        <div class="filter" data-category="house">
+            <i class="fa-solid fa-house"></i>
+            <label>House</label>
+        </div>
+        <div class="filter" data-category="camping">
+            <i class="fa-solid fa-campground"></i>
+            <label>Camping</label>
+        </div>
+        <div class="filter" data-category="igloo">
+            <i class="fa-solid fa-igloo"></i>
+            <label>Igloo</label>
+        </div>
+        <div class="filter" data-category="mountain">
+            <i class="fa-solid  fa-mountain"></i>
+            <label>Mountain</label>
+        </div>
+        
+        <div class="filter" data-category="treehouse">
+            <i class="fa-solid fa-tree"></i>
+            <label>Treehouse</label>
+        </div>
+        
+        <div class="filter" data-category="boat">
+            <i class="fa-solid fa-ship"></i>
+            <label>Boat</label>
+        </div>
+        
+    </div>
+    <div class="form-check-reverse form-switch switch">
+        <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" unchecked>
+        <label class="form-check-label" for="flexSwitchCheckChecked">After Tax</label>
+    </div>
+    
+</div>
+    <div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-1 g-4">
+        <% for(let listing of listings){ %>
+            <a href="/listings/<%= listing._id %>" class="card-linking" data-category="<%= listing.category.toLowerCase() %>" name="<%= listing.title %>">
+                <div class="card col listing-card">
+
+                    <img src="<%= listing.image.url %>" class="card-img-top" alt="..." style="height: 20rem;">
+
+                    <div class="card-img-overlay"></div>
+                    <div class="card-body">
+                        <h5 class="card-title"><b>
+
+                                <%= listing.title %>
+                            </b>
+                        </h5>
+                        <p class="card-text"><text>
+ &#8377 <%= listing.price.toLocaleString('en-IN')  %>
+                        </text> <i class="text-muted">&nbsp &#8377 <%= listing.price*1.18 %></i>
+                        </p>
+
+                    </div>
+                </div>
+            </a>
+        <% }%>
+    </div   >

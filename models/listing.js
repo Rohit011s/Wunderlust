@@ -20,6 +20,7 @@ const listingSchema = new Schema({
       ref: "Review",
     },
   ],
+  category: { type: String, enum: ["Apartment", "House", "Camping", "Igloo", "Mountain", "Treehouse", "Boat", "Other"], default: "Other"},
   owner: {
     type: Schema.Types.ObjectId,
     ref: "User",

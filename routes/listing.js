@@ -7,6 +7,10 @@ const schemaValidation = require("../schemaValidation.js");
 const flash = require("connect-flash");
 const { isLoggedIn, isOwner } = require("../middleware.js");
 const listingController = require("../controller/listing.js");
+const multer = require("multer");
+const { storage } = require("../cloudConfig.js");
+const upload = multer({ storage });
+
 //listing schema
 const validateListing = (req, res, next) => {
   let { error } = schemaValidation.listingSchema.validate(req.body);
@@ -24,9 +28,11 @@ router
   .get(wrapAsync(listingController.index))
   .post(
     isLoggedIn,
+    upload.single("listing[image][url]"),
     validateListing,
     wrapAsync(listingController.createListing),
   );
+
 //new listing form
 router.get("/new", isLoggedIn, listingController.renderNewForm);
 //show listing
@@ -35,15 +41,11 @@ router
   .get(wrapAsync(listingController.showListing))
   .put(
     isLoggedIn,
-    isOwner,
+    isOwner,upload.single("listing[image][url]"),
     validateListing,
     wrapAsync(listingController.updateListing),
   )
-  .delete(
-    isLoggedIn,
-    isOwner,
-    wrapAsync(listingController.delterListing),
-  );
+  .delete(isLoggedIn, isOwner, wrapAsync(listingController.delterListing));
 //edit listing form
-router.get("/:id/edit", isLoggedIn, wrapAsync(listingController.editForm));
+router.get("/:id/edit", isLoggedIn,  wrapAsync(listingController.editForm));
 module.exports = router;

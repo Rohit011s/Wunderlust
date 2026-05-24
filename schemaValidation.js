@@ -11,6 +11,7 @@ module.exports.listingSchema = Joi.object({
         filename: Joi.string().allow("", null),
         url: Joi.string().uri().allow("", null),
     }).allow("", null),
+    category: Joi.string().valid("Apartment", "House", "Camping", "Igloo", "Mountain", "Treehouse", "Boat", "Other").default("none").allow("", null),
   }).required()
 });
 

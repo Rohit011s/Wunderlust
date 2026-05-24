@@ -4,7 +4,7 @@
     <div class="col-8 offset-2">
       <h3>Add New Listing</h3>
 
-      <form action="/listings" method="POST" class="needs-validation" novalidate>
+      <form action="/listings" method="POST" class="needs-validation" enctype="multipart/form-data" novalidate>
         <div class="mb-3">
           <label for="title" class="form-label">Title</label>
           <input type="text" name="listing[title]" class="form-control" placeholder="Title" required />
@@ -41,13 +41,32 @@
             enter a valid location.
           </div>
         </div>
+      
         <div class="mb-3">
-          <label for="image" class="form-label">Image URL</label>
-          <input type="text" name="listing[image][url]" class="form-control" placeholder="Image URL" required />
+          <label for="image" class="form-label">upload image</label>
+          <input type="file" name="listing[image][url]" class="form-control" required />
           <div id="invalidCheck3Feedback" class="invalid-feedback">
             enter a valid image URL.
           </div>
-          <button class="btn btn-primary" type="submit">Add</button>
+        </div>
+        <div class="mb-3">
+          <label for="category" class="form-label">Category</label>
+          <select name="listing[category]" class="form-select" required>
+            <option value="">Select a category</option>
+            <option value="Apartment">Apartment</option>
+            <option value="House">House</option>
+            <option value="Camping">Camping</option>
+            <option value="Igloo">Igloo</option>
+            <option value="Mountain">Mountain</option>
+            <option value="Treehouse">Treehouse</option>
+            <option value="Boat">Boat</option>
+            <option value="Other">Other</option>
+          </select>
+          <div id="invalidCheck3Feedback" class="invalid-feedback">
+            select a valid category.
+          </div>
+        </div>
+        <button class="btn btn-primary" type="submit">Add</button>
       </form>
     </div>
   </div>
