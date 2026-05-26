@@ -9,7 +9,6 @@ module.exports.submitSignup=async (req, res) => {
       const registeredUser = await User.register(newUser, password);
       req.login(registeredUser, (err) => {
         if (err) {return next(err);};
-        console.log(registeredUser);
         req.flash("success", "Welcome to Wunderlust!");
         res.redirect("/listings");
       });

@@ -56,7 +56,7 @@
                         </h5>
                         <p class="card-text"><text>
  &#8377 <%= listing.price.toLocaleString('en-IN')  %>
-                        </text> <i class="text-muted">&nbsp &#8377 <%= listing.price*1.18 %></i>
+                        </text> <i class="text-muted">&nbsp &#8377 <%= Math.floor(listing.price*1.18) %></i>
                         </p>
 
                     </div>

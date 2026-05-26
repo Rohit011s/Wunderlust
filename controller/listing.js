@@ -44,9 +44,6 @@ module.exports.updateListing = async (req, res) => {
   let { id } = req.params;
   let update = await Listing.findByIdAndUpdate(id, req.body.listing);
   let requestedUpdate = req.body.listing;
-  console.log(requestedUpdate);
-
-  console.log(update);
   if (typeof req.file !== "undefined") {
     let url = req.file.path;
     let filename = req.file.filename;
