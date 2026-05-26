@@ -1,5 +1,5 @@
 {"engines":{
-"node": "22.7.0",
+"node": "22.7.0"
 },
   "name": "mongo3",
   "version": "1.0.0",
