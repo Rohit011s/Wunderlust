@@ -14,7 +14,7 @@ const listingRouter = require("./routes/listing.js");
 const reviewRouter = require("./routes/review.js");
 const userRouter = require("./routes/user.js");
 const session = require("express-session");
-const MongoDBStore = require('connect-mongodb-session')(session);
+const MongoStore = require("connect-mongo");
 const flash = require("connect-flash");
 const passport = require("passport");
 const LocalStrategy=require("passport-local");
@@ -26,14 +26,13 @@ app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
 app.engine("ejs", ejs_mate);
 
-const store = new MongoDBStore({
-  uri: dbUrl,
+const store = MongoStore.create({
+  mongoUrl: dbUrl,
   crypto: {
     secret: process.env.SECRET,
   },
   touchAfter: 24 * 60 * 60,
-  databaseName: 'wanderlust',
-  collection: 'mySessions'
+  collectionName: "mySessions",
 });
 store.on("error", function(e){
   console.log("mongo session store error", e);
